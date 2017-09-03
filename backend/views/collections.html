@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>BandKeeper</title>
+        <meta charset="UTF-8"></meta>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+        <meta name="description" content="keep track of saved artists"></meta>
+        <meta name="keywords" content="artists, bands, spotify"></meta>
+        <meta name="author" content="Dylan Lettinga"></meta>
+
+        <!-- CSS Reset -->
+        <link rel="stylesheet" href="assets/css/vendor/normalize.css">
+
+        <!-- Milligram CSS minified -->
+        <link rel="stylesheet" href="assets/css/vendor/milligram.min.css">
+
+        <!-- Custom styles -->
+        <link rel="stylesheet" href="assets/css/index.css">
+
+        <script src="assets/js/vendor/jquery-3.2.1.min.js"></script>
+    </head>
+    <body>
+        <main class="wrapper">
+            <nav class="nav">
+                <section class="container">
+                    <div class="nav-title float-left">BandKeeper</div>
+                    <ul class="nav-list float-right">
+                        <li class="nav-item"><a class="nav-link" href="">test</a></li>
+                    </ul>
+                </section>
+            </nav>
+            <header class="header">
+                <section class="container">
+                    
+                </section>
+            </header>
+            <section class="container">
+                <div class="heading-bar">
+                    <div class="float-left">
+                        <h2>Collections</h2>
+                    </div>
+                    <div class="float-right">
+                        Order by: name, currency
+                    </div>
+                </div>
+
+                {{#arr}}
+                <div class="row">
+                    <div class="column column-20">
+                        <img src="{{thumb}}" alt="" height="180" width="180">
+                    </div>
+                    <div class="column column-80">
+                        <h3><a href="collection/{{cid}}">{{name}}</a></h3>
+                        <p>{{description}}</p>
+                        <p><b>Last Updated: </b>{{updated}}</p>
+                    </div>
+                </div>
+                {{/arr}}
+            </section>
+        </main>
+        <script>
+            $("#add-collection").on("click", function(){
+                alert("test");
+            });
+        </script>
+    </body>
+</html>

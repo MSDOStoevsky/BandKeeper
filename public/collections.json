@@ -1,0 +1,16 @@
+[
+    {
+        "name": "Black Metal",
+        "cid": "j9bnk01afh3v12",
+        "description": "Old to modern black metal",
+        "thumb": "http://www.angrymetalguy.com/wp-content/uploads/2009/10/Gorgoroth-new-album-cover.JPG",
+        "updated": "09/02/2017" 
+    },
+    {
+        "name": "Scandanavian Death",
+        "cid": "j9bnk01afh3v80",
+        "description": "Old to modern scandinavian death",
+        "thumb": "http://www.angrymetalguy.com/wp-content/uploads/2015/07/Entombed_Left-Hand-Path.jpg",
+        "updated": "09/02/2017"
+    }
+]
