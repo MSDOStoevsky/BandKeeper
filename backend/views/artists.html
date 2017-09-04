@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>BandKeepr</title>
+        <title>BandKeepr | Artists</title>
         <meta charset="UTF-8"></meta>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
@@ -25,7 +25,11 @@
                 <section class="container">
                     <div class="nav-title float-left">BandKeeper</div>
                     <ul class="nav-list float-right">
-                        <li class="nav-item"><a class="nav-link" href="">test</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" target="_blank" href="https://github.com/MSDOStoevsky/BandKeeper">
+                                <img src="../assets/img/github_link.png" alt="Github">
+                            </a>
+                        </li>
                     </ul>
                 </section>
             </nav>
@@ -37,12 +41,13 @@
             <section class="container">
                 <div class="heading-bar">
                     <div class="float-left">
-                        <h2>Artists</h2>
+                        <h2>Artists <span id="add-art-btn" class="add-btn">+</span></h2>
                     </div>
                     <div class="float-right">
                         Order by: name, currency
                     </div>
                 </div>
+
                 {{#arr}}
                 <div class="row">
                     <div class="column column-20">
@@ -53,13 +58,126 @@
                         <p>{{description}}</p>
                         <p><b>Last Updated: </b>{{updated}}</p>
                     </div>
+                    <a class="row-del" onclick="art_del('{{cid}}')">&#215;</a>
                 </div>
                 {{/arr}}
             </section>
         </main>
+
+        <div class="modal" id="add-art-modal">
+            <div class="modal-container clearfix">
+                <div class="modal-header">
+                </div>
+                <div class="modal-content">
+                    <div class="container">
+                        <h2>Add New Artist</h2>
+                        <form id="new-art-form">
+                            <fieldset>
+                                <label for="name-field">Name</label>
+                                <input placeholder="e.g. Katy Perry, Dying Fetus, etc." name="name" id="name-field" type="text" required>
+                                
+                                <label for="descr-field">Description</label>
+                                <input placeholder="Unique sound" name="description" id="descr-field" type="text">
+
+                                <label for="thumb-field">Thumbnail</label>
+                                <input placeholder="https://upload.wikimedia.org/wikipedia/en/8/82/Metallica_-_Ride_the_Lightning_cover.jpg" name="description" id="thumb-field" type="text">
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="container">
+                        <button id="modal-submit" class="button button-primary float-left">Save</button>
+                        <button id="modal-close" class="button button-outline float-right">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="confirm-modal">
+            <div class="confirm-container clearfix">
+                <div class="modal-content">
+                    <div class="container">
+                        <h3 class="text-center">Are you sure you want to delete this?</h3>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="container">
+                        <button id="confirm-yes" class="button button-primary float-left">Yes</button>
+                        <button id="confirm-no" class="button button-outline float-right">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script>
-            $("#rmv-artist").on("click", function(){
-                alert("test");
+            var dateObj = new Date();
+            var month = dateObj.getUTCMonth() + 1; //months from 1-12
+            var day = dateObj.getUTCDate();
+            var year = dateObj.getUTCFullYear();
+            newdate = month + "/" + day + "/" + year;
+
+            function cid_gen() {
+                var S4 = function() {
+                    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+                };
+                return (S4()+S4()+S4());
+            }
+
+            function art_del(cid){
+                $("#confirm-modal").show();
+                $("#confirm-yes").click(function(){
+                    $.ajax({
+                        url:  '/api/collection/'+cid,
+                        type: 'DELETE',
+                        success: function(){
+                            $('#confirm-modal').hide();
+                            window.location.reload();
+                        } || $.noop
+                    });
+                });
+                $("#confirm-no").click(function(){
+                    $('#confirm-modal').hide();
+                });
+            }
+
+            $("#add-art-btn").on("click", function(){
+                $("#add-art-modal").show();
+            });
+
+            $("#modal-close").on("click", function(){
+                $("#add-art-modal").hide();
+            });
+
+            $("#modal-submit").on("click", function() {
+                var namef = $( "#name-field" ).val();
+                var descrf = $( "#descr-field" ).val();
+                var thumbf = $( "#thumb-field" ).val();
+
+                if ( true ) {
+                    $.ajax({
+                        url: "/api/collection/",
+                        data : JSON.stringify(
+                        {
+                            cid : cid_gen(),
+                            name: namef,
+                            description: descrf,
+                            thumb: thumbf === null ? "/assets/img/collection.png" : thumbf,
+                            updated: newdate,
+                        }),
+                        contentType : 'application/json',
+                        type : 'POST',
+                        success: function(){
+                            $('#add-coll-modal').hide();
+                            $('#new-art-form')[0].reset();
+                            window.location.reload();
+                        } || $.noop,
+                        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                            $('#add-coll-modal').hide();
+                            $('#new-art-form')[0].reset();
+                        }  
+                    });
+                }
             });
         </script>
     </body>

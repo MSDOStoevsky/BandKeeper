@@ -14,6 +14,19 @@ body {
 a {
     color: #222;
 }
+img {
+    vertical-align: middle;
+}
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="text"]:focus,
+input[type="url"]:focus,
+textarea:focus, select:focus {
+    border-color: #c62525;
+}
 .wrapper .container {
     max-width: 100rem;
 }
@@ -70,6 +83,14 @@ a {
 .nav .nav-link:hover {
     color: #222; 
 }
+.nav .nav-link img {
+    height: 40px;
+    opacity: .6;
+    transition: .1s all linear;
+}
+.nav .nav-link img:hover {
+    opacity: 1;
+}
 .nav .active {
     color: #222; 
 }
@@ -101,17 +122,17 @@ a {
 .row img {
     height: auto;
 }
-.float-right{
-    float: right;
-}
-.float-left{
-    float: left;
+.text-center {
+    text-align: center;
 }
 
 /* ui */
 .button {
     background-color: #c62525;
     border-color: #c62525;
+}
+.button.button-outline {
+    color: #c62525;
 }
 .button-circle {
     -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3),0px 0px 1px rgba(0,0,0,.1),inset 0px 1px 0px rgba(255,255,255,.25),inset 0px -1px 0px rgba(0,0,0,.15);
@@ -122,4 +143,96 @@ a {
     width: 45px;
     height: 45px;
     text-align: center;
+}
+.row-del {
+    position: absolute;
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+    /* Rules below not implemented in browsers yet */
+    -o-user-select: none;
+    user-select: none;
+    right: 2rem;
+    font-size: 4rem;
+    line-height: 0.5;
+    color: #c62525;
+}
+.row-del:hover{
+    cursor: pointer;
+}
+.add-btn {
+    -webkit-box-shadow: 0px 2px 4px rgba(0,0,0,.3),0px 0px 1px rgba(0,0,0,.1),inset 0px 1px 0px rgba(255,255,255,.25),inset 0px -1px 0px rgba(0,0,0,.15);
+    -moz-box-shadow: 0px 2px 4px rgba(0,0,0,.3),0px 0px 1px rgba(0,0,0,.1),inset 0px 1px 0px rgba(255,255,255,.25),inset 0px -1px 0px rgba(0,0,0,.15);
+    box-shadow: 0px 2px 4px rgba(0,0,0,.3),0px 0px 1px rgba(0,0,0,.1),inset 0px 1px 0px rgba(255,255,255,.25),inset 0px -1px 0px rgba(0,0,0,.15);
+    opacity: .6;
+    transition: .1s all linear;
+    border: 2px solid #1E9E1E;
+    border-radius: 10px;
+    color: #1E9E1E;
+    font-size: 2.5rem;
+    padding: 0px 8px 0px 8px;
+    margin: 0px 10px 0px 10px;
+}
+.add-btn:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+/* Modal Content */
+.modal-container {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 50%;
+    min-width: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: slidetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: slidetop;
+    animation-duration: 0.4s;
+}
+.modal .confirm-container {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 30rem;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: slidetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: slidetop;
+    animation-duration: 0.4s;
+} 
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+/* Add Animation */
+@-webkit-keyframes slidetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+@keyframes slidetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
 }
