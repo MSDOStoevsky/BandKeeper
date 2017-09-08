@@ -1,5 +1,6 @@
+"use strict";
 var Client = require('mongodb').MongoClient;
-var conn = "mongodb://localhost:27017/bandkeeper";
+var conn = "mongodb://"+process.env.USER_IP+":27017/bandkeeper";
 
 module.exports = {
     /* create collection (table) */

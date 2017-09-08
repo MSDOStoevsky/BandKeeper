@@ -16,7 +16,7 @@
 
         <!-- Custom styles -->
         <link rel="stylesheet" href="../assets/css/index.css">
-        
+    
         <script src="../assets/js/vendor/jquery-3.2.1.min.js"></script>
     </head>
     <body>
@@ -35,7 +35,7 @@
             </nav>
             <header class="header">
                 <section class="container">
-                    
+                    <a href="/">Collections</a>
                 </section>
             </header>
             <section class="container">
@@ -75,12 +75,10 @@
                             <fieldset>
                                 <label for="name-field">Name</label>
                                 <input placeholder="e.g. Katy Perry, Dying Fetus, etc." name="name" id="name-field" type="text" required>
-                                
+                                <div class="" id="results">
+                                </div>
                                 <label for="descr-field">Description</label>
                                 <input placeholder="Unique sound" name="description" id="descr-field" type="text">
-
-                                <label for="thumb-field">Thumbnail</label>
-                                <input placeholder="https://upload.wikimedia.org/wikipedia/en/8/82/Metallica_-_Ride_the_Lightning_cover.jpg" name="description" id="thumb-field" type="text">
                             </fieldset>
                         </form>
                     </div>
@@ -109,12 +107,28 @@
                 </div>
             </div>
         </div>
+
         <script>
             var dateObj = new Date();
             var month = dateObj.getUTCMonth() + 1; //months from 1-12
             var day = dateObj.getUTCDate();
             var year = dateObj.getUTCFullYear();
-            newdate = month + "/" + day + "/" + year;
+            var newdate = month + "/" + day + "/" + year;
+
+            function get_cookie(cname) {
+                var name = cname + "=";
+                var ca = document.cookie.split(';');
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
 
             function cid_gen() {
                 var S4 = function() {
@@ -140,6 +154,42 @@
                 });
             }
 
+            var searchAlbums = function (query) {
+                $.ajax({
+                    url: 'https://api.spotify.com/v1/search',
+                    headers : {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + get_cookie("AccessToken"),
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        q: query,
+                        type: 'artist'
+                    },
+                    success: function (response) {
+                        $("#results").empty();
+                        var artistres = response.artists.items;
+                        console.log(artistres);
+                        for (var i = 0; i < artistres.length; i++)
+                        {
+                            $("#results").append(
+                                "<div style='background-image:url("+artistres[i].images[0].url+")' data-album-id="+artistres[i].id+" class='cover'>"+artistres[i].name+"</div>"
+                            )
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                    }  
+                });
+            };
+
+
+
+            $("#name-field").on("input", function(){
+                if($(this).val() !== "")
+                    searchAlbums($(this).val());
+            });
+
             $("#add-art-btn").on("click", function(){
                 $("#add-art-modal").show();
             });
@@ -151,11 +201,10 @@
             $("#modal-submit").on("click", function() {
                 var namef = $( "#name-field" ).val();
                 var descrf = $( "#descr-field" ).val();
-                var thumbf = $( "#thumb-field" ).val();
 
                 if ( true ) {
                     $.ajax({
-                        url: "/api/collection/",
+                        url: "/api/artist/",
                         data : JSON.stringify(
                         {
                             cid : cid_gen(),

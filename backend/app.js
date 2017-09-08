@@ -2,6 +2,7 @@
  * Dylan Lettinga
  * 08/29/2017
  */
+require('dotenv').config();
 const mongo = require('./dbops');
 var url = require('url');
 var fs = require("fs");
@@ -27,6 +28,7 @@ app.get('/', function (req, res) {
     mongo.query("collection", {}, function(ret){
         var page = fs.readFileSync(path.join(__dirname, 'views/collections.html'), "utf8");
         var html = mustache.to_html(page, ret); // replace all of the data
+        res.cookie
         res.end(html);
     });
 })
@@ -108,5 +110,4 @@ var server = app.listen(5678, function () {
     var host = server.address().address
     var port = server.address().port
     console.log("Server started at http://%s:%s", host, port);
-    //mongo.createcol("invoice");
 })
