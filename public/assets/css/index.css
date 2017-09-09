@@ -125,6 +125,18 @@ textarea:focus, select:focus {
 .text-center {
     text-align: center;
 }
+#results {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-flow: row wrap;
+}
+.result {
+    margin-top: 1rem;
+    width: 33%;
+}
 
 /* ui */
 .button {
@@ -226,6 +238,7 @@ textarea:focus, select:focus {
     clear: both;
     display: table;
 }
+
 /* Add Animation */
 @-webkit-keyframes slidetop {
     from {top: -300px; opacity: 0}
@@ -235,4 +248,18 @@ textarea:focus, select:focus {
 @keyframes slidetop {
     from {top: -300px; opacity: 0}
     to {top: 0; opacity: 1}
+}
+
+/* Medium screens */
+@media all and (max-width: 800px) {
+    .result {
+        width: 50%;
+    }
+}
+  
+  /* Small screens */
+@media all and (max-width: 500px) {
+    .result {
+        width: 100%;
+    }
 }

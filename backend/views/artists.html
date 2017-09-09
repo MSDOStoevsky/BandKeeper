@@ -54,7 +54,7 @@
                         <img src="{{thumb}}" alt="" height="180" width="180">
                     </div>
                     <div class="column column-80">
-                        <h3><a href="collection/{{cid}}/{{aid}}">{{name}}</a></h3>
+                        <h3><a href="{{aid}}/">{{name}}</a></h3>
                         <p>{{description}}</p>
                         <p><b>Last Updated: </b>{{updated}}</p>
                     </div>
@@ -79,6 +79,10 @@
                                 </div>
                                 <label for="descr-field">Description</label>
                                 <input placeholder="Unique sound" name="description" id="descr-field" type="text">
+                                
+                                <input name="cid" id="cid-field" type="hidden">
+                                <input name="spotifyid" id="spotifyid-field" type="hidden">
+                                <input name="thumb" id="thumb-field" type="hidden">
                             </fieldset>
                         </form>
                     </div>
@@ -109,11 +113,15 @@
         </div>
 
         <script>
+            var path_arr = window.location.pathname.split( '/' );
+            var cid_from_path = path_arr[2];
             var dateObj = new Date();
             var month = dateObj.getUTCMonth() + 1; //months from 1-12
             var day = dateObj.getUTCDate();
             var year = dateObj.getUTCFullYear();
             var newdate = month + "/" + day + "/" + year;
+            var token = get_cookie("SESSION");
+            console.log(token);
 
             function get_cookie(cname) {
                 var name = cname + "=";
@@ -130,7 +138,7 @@
                 return "";
             }
 
-            function cid_gen() {
+            function uid_gen() {
                 var S4 = function() {
                     return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
                 };
@@ -159,7 +167,7 @@
                     url: 'https://api.spotify.com/v1/search',
                     headers : {
                         'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + get_cookie("AccessToken"),
+                        'Authorization': 'Bearer ' + token,
                         'Content-Type': 'application/json'
                     },
                     data: {
@@ -169,11 +177,13 @@
                     success: function (response) {
                         $("#results").empty();
                         var artistres = response.artists.items;
-                        console.log(artistres);
                         for (var i = 0; i < artistres.length; i++)
                         {
+                            console.log(artistres[i]);
                             $("#results").append(
-                                "<div style='background-image:url("+artistres[i].images[0].url+")' data-album-id="+artistres[i].id+" class='cover'>"+artistres[i].name+"</div>"
+                                "<div class='result' data-album-id='"+artistres[i].id+"'>"
+                                    + "<div class='result-name'>"+artistres[i].name+"</div>"
+                                    + "<img src='"+artistres[i].images[0].url+"' >"
                             )
                         }
                     },
@@ -183,11 +193,19 @@
                 });
             };
 
-
+            $("#results").on("click", '.result', function(){
+                $("#results").empty();
+                $('#name-field').val($(this).find('.result-name').text());
+                $('#thumb-field').val($(this).find('img').attr('src'));
+                $('#spotifyid-field').val($(this).attr('data-album-id'));
+            });
 
             $("#name-field").on("input", function(){
                 if($(this).val() !== "")
                     searchAlbums($(this).val());
+                else{
+                    $("#results").empty();
+                }
             });
 
             $("#add-art-btn").on("click", function(){
@@ -195,19 +213,24 @@
             });
 
             $("#modal-close").on("click", function(){
+                $("#results").empty();
                 $("#add-art-modal").hide();
             });
 
             $("#modal-submit").on("click", function() {
                 var namef = $( "#name-field" ).val();
                 var descrf = $( "#descr-field" ).val();
+                var thumbf = $( "#thumb-field" ).val();
+                var spotifyidf = $('#spotifyid-field').val();
 
                 if ( true ) {
                     $.ajax({
                         url: "/api/artist/",
                         data : JSON.stringify(
                         {
-                            cid : cid_gen(),
+                            cid : cid_from_path,
+                            aid : uid_gen(),
+                            spotifyid : spotifyidf,
                             name: namef,
                             description: descrf,
                             thumb: thumbf === null ? "/assets/img/collection.png" : thumbf,

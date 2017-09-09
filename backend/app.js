@@ -4,6 +4,7 @@
  */
 require('dotenv').config();
 const mongo = require('./dbops');
+const auth = require('./auth');
 var url = require('url');
 var fs = require("fs");
 var express = require('express');
@@ -17,6 +18,8 @@ var app = express();
 var jsonParser = bodyParser.json()
 //var path = path.join(__dirname, '../public');
 
+var access_token;
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -28,7 +31,6 @@ app.get('/', function (req, res) {
     mongo.query("collection", {}, function(ret){
         var page = fs.readFileSync(path.join(__dirname, 'views/collections.html'), "utf8");
         var html = mustache.to_html(page, ret); // replace all of the data
-        res.cookie
         res.end(html);
     });
 })
@@ -36,10 +38,16 @@ app.get('/', function (req, res) {
 /* server artist page */
 app.get('/collection/:cid', function (req, res) {
     console.log("[200] " + req.method + " to " + req.url);
-    console.log( req.params.cid);
+
+    /* get access token at beggining of session */
+    auth.get_access(function(token){ access_token = token; });
+
     mongo.query("artist", {cid: req.params.cid}, function(ret){
         var page = fs.readFileSync(path.join(__dirname, 'views/artists.html'), "utf8");
         var html = mustache.to_html(page, ret); // replace all of the data
+
+        //res.cookie('AccessToken', access_token, { httpOnly: true });
+        res.cookie('SESSION', access_token, { });
         res.end(html);
     });
 })
