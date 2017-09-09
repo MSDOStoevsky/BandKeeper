@@ -38,14 +38,20 @@ app.get('/', function (req, res) {
 /* server artist page */
 app.get('/collection/:cid', function (req, res) {
     console.log("[200] " + req.method + " to " + req.url);
-
+    var coll_name;
     /* get access token at beggining of session */
     auth.get_access(function(token){ access_token = token; });
 
+    /* get information about colelction */
+    mongo.query("collection", {cid: req.params.cid}, function(ret){
+        coll_name = ret.arr[0].name;
+    });
+
+    /* render all artists */
     mongo.query("artist", {cid: req.params.cid}, function(ret){
+        ret.collection = coll_name;
         var page = fs.readFileSync(path.join(__dirname, 'views/artists.html'), "utf8");
         var html = mustache.to_html(page, ret); // replace all of the data
-
         //res.cookie('AccessToken', access_token, { httpOnly: true });
         res.cookie('SESSION', access_token, { });
         res.end(html);

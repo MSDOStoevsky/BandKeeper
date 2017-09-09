@@ -104,10 +104,10 @@ textarea:focus, select:focus {
 }
 .header .container {
     font-family: 'Teko', sans-serif;
-    color: #fff;
+    color: #222;
     border-top: 0;
-    padding-bottom: 11.5rem;
-    padding-top: 11.5rem;
+    padding-bottom: 9rem;
+    padding-top: 9rem;
     max-width: 100%;
     position: relative;
     text-align: center;
