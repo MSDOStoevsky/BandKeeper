@@ -1,6 +1,6 @@
-var request = require('request'); // "Request" library
-var client_id = process.env.CLIENT_ID; // Your client id
-var client_secret = process.env.CLIENT_SECRET; // Your secret
+var request = require('request');
+var client_id = process.env.CLIENT_ID;
+var client_secret = process.env.CLIENT_SECRET;
 
 // your application requests authorization
 var auth_options = {
