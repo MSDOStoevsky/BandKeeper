@@ -23,16 +23,6 @@ module.exports = {
         
                 // use the access token to access the Spotify Web API
                 res(body.access_token);
-                /*var options = {
-                    url: 'https://api.spotify.com/v1/users/jmperezperez',
-                    headers: {
-                        'Authorization': 'Bearer ' + token
-                    },
-                    json: true
-                };
-                request.get(options, function(error, response, body) {
-                    console.log(body);
-                });*/
             }
         });
     }
